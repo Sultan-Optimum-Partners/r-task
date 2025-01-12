@@ -1,20 +1,20 @@
 import { test as base } from '@playwright/test';
 import LoginPage from "../tests/pages/login.page";
-import HomePage from "../tests/pages/home.page";
-import ContentListPage from "../tests/pages/creation/content/list.page";
-import ContentEditPage from "../tests/pages/creation/content/edit.page";
-import ImageEditPage from "../tests/pages/creation/content/image/edit.page";
-import ImageListPage from "../tests/pages/creation/content/image/list.page";
-import Tenant from '../tests/pages/shared/tenant.shared';
+import TenantSelection from '../tests/pages/shared/tenant.shared';
+import ContentListPage from '../tests/pages/creation/content/list.page';
+import ContentEditPage from '../tests/pages/creation/content/edit.page';
+import ImageEditPage from '../tests/pages/creation/content/image/edit.page';
+import ImageListPage from '../tests/pages/creation/content/image/list.page';
+import BasePage from '../tests/pages/base.page';
 
 type fixtures = {
     loginPage: LoginPage,
-    homePage: HomePage,
     listContentPage: ContentListPage,
     editContentPage: ContentEditPage,
-    imageEditPage: ImageEditPage,
+    imageEditPage: ImageEditPage, 
     imageListPage: ImageListPage,
-    tenant: Tenant
+    tenant: TenantSelection, 
+    basePage: BasePage
 };
 
 export const test = base.extend<fixtures>({
@@ -26,12 +26,12 @@ export const test = base.extend<fixtures>({
         const loginPage = new LoginPage(page);
         use(loginPage);
     },
-    homePage: async ({ page }, use) => {
-        const homePage = new HomePage(page);
-        use(homePage);
+    basePage: async ({ page }, use) => {
+        const basePage = new BasePage(page);
+        use(basePage);
     },
     listContentPage: async ({ page }, use) => {
-        const tenant = new Tenant(page);
+        const tenant = new TenantSelection(page);
         const listContentPage = new ContentListPage(page, tenant);
         use(listContentPage); 
     },

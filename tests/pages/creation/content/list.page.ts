@@ -1,19 +1,15 @@
 import { Page } from "@playwright/test";
-import Tenant from "../../shared/tenant.shared";
+import BasePage from "../../base.page";
+import TenantSelection from "../../shared/tenant.shared";
 
-export default class ContentListPage{
-    readonly page: Page;
-    readonly tenant: Tenant;
-    constructor(page: Page, tenant: Tenant){
-        this.page = page;
+export default class ContentListPage extends BasePage{
+    readonly tenant: TenantSelection;
+    constructor(page: Page, tenant: TenantSelection){
+        super(page);
         this.tenant = tenant;
     }
 
     createNewContentButton = () => this.page.getByLabel('Create New Content');
-
-    async clickCreateContent(){
-        await this.createNewContentButton().click();
-    }
 
     async selectHomeAndTownTenant(): Promise<void>{
         await this.tenant.selectTownAndCountry();

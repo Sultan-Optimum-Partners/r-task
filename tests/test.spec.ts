@@ -1,12 +1,12 @@
 import { test, expect } from '../fixtures/pages.fixtures';
 
-test('create content test', async ({ page, loginPage, homePage, listContentPage, editContentPage, imageListPage, imageEditPage }) => {
+test('create content test', async ({ page, loginPage, basePage, listContentPage, editContentPage, imageListPage, imageEditPage }) => {
   
-  await loginPage.login(process.env.USERNAME!, process.env.PASSWORD!);
+  await loginPage.authenticate();
 
-  expect(homePage.selectWorkspaceButton()).toBeVisible({timeout: 10000});
+  expect(basePage.selectWorkspaceButton()).toBeVisible({timeout: 10000});
 
-  await homePage.navigateToContent();
+  await basePage.navigateToContent();
 
   expect(page.url()).toContain("/creation/content")
 
@@ -14,31 +14,32 @@ test('create content test', async ({ page, loginPage, homePage, listContentPage,
 
   expect(await listContentPage.getTenantName()).toEqual("Town & Country US")
 
-  await listContentPage.clickCreateContent();
+  await listContentPage.createNewContentButton().click();
 
   expect(editContentPage.saveDraftButton()).toBeVisible({timeout: 10000});
 
-  await editContentPage.addHeadline("Brrr");
-  await editContentPage.fillContentDetails("Brrrr","Brrrr","Brrrr");
-  await editContentPage.clickAddSocialImageButton();
-
-  expect(imageListPage.images().first()).toBeVisible()
-
-  await imageListPage.selectFirstImage();
-  await imageEditPage.fillImageRequiredFields();
-  await imageEditPage.clickBackButton();
-  await editContentPage.clickSettingsTab();
-
-  expect(editContentPage.contentTypeSelect()).toBeVisible();
-
-  await editContentPage.fillSettingsRequiredFields()
-  await editContentPage.clickAddImageArticle();
+  await editContentPage.addHeadlineAndDek("Headline", "Dek");
+  
+  await editContentPage.leadImageOrVideoContainer().hover();
+  await editContentPage.addLeadImageButton().click();
 
   expect(imageListPage.images().first()).toBeVisible();
 
   await imageListPage.selectFirstImage(); 
+
   await imageEditPage.fillImageRequiredFields();
-  await editContentPage.clickSaveDraft();
+  
+  await imageEditPage.backButton().click();
+
+  await editContentPage.settingsTab().click();
+
+  expect(editContentPage.contentTypeSelect()).toBeVisible();
+
+  await editContentPage.fillSettingsRequiredFields()
+
+  await editContentPage.saveDraftButton().click();
+
+  await editContentPage.draftSavedButtton().waitFor()
   
   expect(editContentPage.draftSavedButtton()).toBeVisible();
  

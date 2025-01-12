@@ -1,11 +1,11 @@
 import { Locator, Page } from "@playwright/test";
 import { selectOption } from "../utilities/select-option.utils";
+import BasePage from "../../../base.page";
 
-export default class ImageEditPage {
-    readonly page: Page;
+export default class ImageEditPage extends BasePage{
 
     constructor(page: Page){
-        this.page = page;
+        super(page);
     }
 
     copyrightsSelect = (): Locator => this.page.locator('fieldset[data-testid*=copyright]');
@@ -22,10 +22,6 @@ export default class ImageEditPage {
         await selectOption(this.imageRightsSelect(), this.page, 0);
         await this.imageTitle().fill("test2.jpg");
         await this.seoAltText().fill("jaja");      
-    }
-
-    async clickBackButton(): Promise<void> {
-        await this.backButton().click();
     }
     
 }

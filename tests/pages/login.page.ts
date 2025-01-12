@@ -13,9 +13,9 @@ export default class LoginPage{
     needHelpLinkLocator = () => this.page.getByRole('link', { name: 'Need help signing in?' });
     forgotPasswordLinkLocator = () => this.page.getByRole('link', { name: 'Forgot your password?' });
     
-    async login(username: string, password: string){
-        await this.usernameLocator().fill(username);
-        await this.passwordLocator().fill(password);
+    async authenticate(){
+        await this.usernameLocator().fill(process.env.USERNAME!);
+        await this.passwordLocator().fill(process.env.PASSWORD!);
         await this.signInButtonLocator().click();
     }
 }
