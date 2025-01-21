@@ -1,10 +1,17 @@
-import { Locator, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import BasePage from "../../base.page";
-import { selectOption } from "./utilities/select-option.utils";
+import { selectOption } from "./shared/select-option.utils";
+import ImageListPage from "./image/list.page";
+import ImageEditPage from "./image/edit.page";
 
 export default class ContentEditPage extends BasePage{
-    constructor(page: Page){
+    readonly imageListPage: ImageListPage;
+    readonly imageEditPage: ImageEditPage;
+
+    constructor(page: Page, imageListPage: ImageListPage, imageEditPage: ImageEditPage){
         super(page);
+        this.imageListPage = imageListPage;
+        this.imageEditPage = imageEditPage;
     }
   
     addAHeadlineField = (): Locator => this.page.locator('[data-testid="title"]');
@@ -34,6 +41,9 @@ export default class ContentEditPage extends BasePage{
         await this.addAHeadlineField().type(headline + "-" + Date.now());
         await this.addDekField().click();
         await this.addDekField().type(dek);
+        await expect(this.slug()).toHaveValue(headline);
+        await expect(this.socialDek()).toHaveValue(dek);
+
     }
 
     async fillContentDetails(socialDek: string, indexDek: string, seoMetaDescription: string){
@@ -46,4 +56,25 @@ export default class ContentEditPage extends BasePage{
         await selectOption(this.contentTypeSelect(), this.page, 0);
         await selectOption(this.sectionSelect(), this.page, 0);
     }
+
+    async insertLeadImage(): Promise<void>{
+        await this.leadImageOrVideoContainer().hover();
+        await this.addLeadImageButton().click();
+        await expect(this.imageListPage.images().first()).toBeVisible();
+        await this.imageListPage.selectFirstImage(); 
+        await this.imageEditPage.closeDrawer().waitFor({state: "visible"})
+        await this.imageEditPage.fillImageRequiredFields();
+        await this.imageEditPage.closeDrawer().click();
+    }
+
+    async setupSettingsTab(): Promise<void>{
+        await this.settingsTab().click();
+
+        expect(this.contentTypeSelect()).toBeVisible();
+      
+        await this.fillSettingsRequiredFields()
+      
+    }
+
+
 }

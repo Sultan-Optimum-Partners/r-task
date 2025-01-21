@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { selectOption } from "../utilities/select-option.utils";
+import { selectOption } from "../shared/select-option.utils";
 import BasePage from "../../../base.page";
 
 export default class ImageEditPage extends BasePage{
@@ -14,7 +14,7 @@ export default class ImageEditPage extends BasePage{
     imageRightsSelect = (): Locator => this.page.locator('fieldset[data-testid*=imageRights]');
     imageTitle = (): Locator => this.page.locator('[data-testid*=imageTitle-input]');
     seoAltText = (): Locator => this.page.locator('[data-testid*=seoAltText-input]');
-    backButton = (): Locator => this.page.getByRole('button', { name: 'Close Drawer' });
+    closeDrawer = (): Locator => this.page.getByRole('button', { name: 'Close Drawer' });
 
     async fillImageRequiredFields(){
         await selectOption(this.copyrightsSelect(), this.page, 0);

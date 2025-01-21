@@ -9,7 +9,7 @@ import { Locator, Page } from "@playwright/test";
  * @returns A promise that resolves after the option is selected.
  */
 export async function selectOption(selectLocator: Locator, page: Page, index: number): Promise<void> {
-    let menuOptions = page.locator('[class$="menu"] > div > div');
+    let menuOptions = page.locator('[id*="option-1"]');
     await selectLocator.click();
     await menuOptions.nth(index).click();
 }

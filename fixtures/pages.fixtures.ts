@@ -36,16 +36,10 @@ export const test = base.extend<fixtures>({
         use(listContentPage); 
     },
     editContentPage: async ({ page }, use) => {
-        const editContentPage = new ContentEditPage(page);
-        use(editContentPage);
-    },
-    imageEditPage: async ({ page }, use) => {
         const imageEditPage = new ImageEditPage(page);
-        use(imageEditPage);
-    },
-    imageListPage: async ({ page }, use) => {
         const imageListPage = new ImageListPage(page);
-        use(imageListPage);
+        const editContentPage = new ContentEditPage(page, imageListPage, imageEditPage);
+        use(editContentPage);
     },
 });
 
